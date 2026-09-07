@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Find schemes{% endblock %}
+{% block content %}
+<div class="welcome-block">
+  <div class="eyebrow">Find schemes</div>
+  <h1>Tell us about your business</h1>
+  <p>These details are used only for this search — nothing here is saved to your profile.</p>
+</div>
+
+<div class="form-card">
+  <form method="POST" action="{{ url_for('results') }}">
+
+    <div class="form-section-title">Business basics</div>
+    <div class="field-row">
+      <div class="field">
+        <label for="business_type">Business type</label>
+        <select id="business_type" name="business_type" required>
+          <option value="">Select type</option>
+          <option value="retail">Retail / shop</option>
+          <option value="manufacturing">Manufacturing</option>
+          <option value="service">Service</option>
+          <option value="printing">Printing / Xerox</option>
+          <option value="food">Food / catering</option>
+          <option value="bakery">Bakery</option>
+          <option value="workshop">Workshop / repair</option>
+          <option value="tailoring">Tailoring</option>
+          <option value="trading">Trading</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="location">Business location / state</label>
+        <input type="text" id="location" name="location" placeholder="e.g. Tamil Nadu" required>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="registration_status">Business registration status</label>
+        <select id="registration_status" name="registration_status">
+          <option value="not_registered">Not registered</option>
+          <option value="udyam">Udyam / MSME registered</option>
+          <option value="gst">GST registered</option>
+          <option value="both">Udyam + GST registered</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="business_age">Business age (years)</label>
+        <input type="number" id="business_age" name="business_age" min="0" max="80" value="0" required>
+        <p class="hint">Enter 0 if this is a new / not-yet-started business.</p>
+      </div>
+    </div>
+
+    <div class="form-section-title">Loan requirement</div>
+    <div class="field-row">
+      <div class="field">
+        <label for="annual_turnover">Annual turnover range (₹)</label>
+        <input type="number" id="annual_turnover" name="annual_turnover" min="0" placeholder="e.g. 300000" required>
+      </div>
+      <div class="field">
+        <label for="loan_amount">Required loan amount (₹)</label>
+        <input type="number" id="loan_amount" name="loan_amount" min="0" placeholder="e.g. 300000" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="loan_purpose">Loan purpose</label>
+      <select id="loan_purpose" name="loan_purpose" required>
+        <option value="">Select purpose</option>
+        <option value="business setup">New business setup</option>
+        <option value="machine purchase">Machine / equipment purchase</option>
+        <option value="working capital">Working capital</option>
+        <option value="business expansion">Business expansion</option>
+        <option value="new unit">New unit</option>
+      </select>
+    </div>
+
+    <div class="form-section-title">Previous applications (optional)</div>
+    <div class="field">
+      <label for="previous_loan">Previous loan / application details</label>
+      <textarea id="previous_loan" name="previous_loan" rows="2" placeholder="e.g. Applied for MUDRA loan in 2023, not yet approved"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-accent btn-block">Find suitable schemes</button>
+  </form>
+</div>
+{% endblock %}

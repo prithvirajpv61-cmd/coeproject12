@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Search history{% endblock %}
+{% block content %}
+<div class="welcome-block">
+  <div class="eyebrow">History</div>
+  <h1>Search history</h1>
+  <p>Your business details aren't saved to your profile, but your past searches are kept here so you can revisit results.</p>
+</div>
+
+{% if history|length == 0 %}
+<div class="empty-state">
+  <h3>No searches yet</h3>
+  <p>Your search history will appear here after you look up schemes.</p>
+  <a href="{{ url_for('find_schemes') }}" class="btn btn-accent">Find schemes</a>
+</div>
+{% else %}
+<div class="history-list">
+  {% for h in history %}
+  <div class="history-entry">
+    <div class="history-index">{{ '%02d'|format(loop.revindex) }}</div>
+    <div class="history-main">
+      <h3>{{ h.business_type|title }}</h3>
+      <div class="history-meta">
+        ₹{{ "{:,}".format(h.loan_amount) }} · {{ h.loan_purpose|title }} · {{ h.location }}
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div class="history-date">{{ h.search_date }}</div>
+      <a href="{{ url_for('history_view', history_id=h.history_id) }}" class="btn btn-outline btn-sm" style="margin-top:6px;">View results</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

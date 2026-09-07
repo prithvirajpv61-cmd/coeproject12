@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<!-- Hero Welcome Section -->
+<section class="dash-hero-card">
+  <div class="dash-hero-content">
+    <div class="hero-badge-pill">
+      <span class="pulse-dot"></span>
+      <span>Official Indian Government Scheme Discovery</span>
+    </div>
+    <h1 class="dash-hero-title">{{ greeting_time }}, {{ (user.name if user and user.name else current_user_name) }} 👋</h1>
+    <p class="dash-hero-subtitle">Find financial support that fits your business. Discover government loan schemes, evaluate eligibility with transparent AI match scoring, and save the right options for your venture.</p>
+
+    <div class="dash-hero-actions">
+      <a href="{{ url_for('find_schemes') }}" class="btn btn-hero-primary">
+        <span>Find Suitable Schemes</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+      {% if profile_completion < 100 %}
+      <a href="{{ url_for('profile') }}" class="btn btn-hero-secondary">
+        <span>Complete Profile</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </a>
+      {% else %}
+      <a href="{{ url_for('saved_schemes') }}" class="btn btn-hero-secondary">
+        <span>View Saved Schemes ({{ saved_count }})</span>
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="hero-trust-row">
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <span>100% Free & Transparent</span>
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <span>Instant Match Scoring</span>
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+        <span>No Business Data Retained</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-hero-visual" aria-hidden="true">
+    <div class="hero-card-preview">
+      <div class="preview-mini-badge">AI MATCH</div>
+      <div class="preview-score-circle">
+        <span class="score-num">95%</span>
+        <span class="score-lbl">FIT</span>
+      </div>
+      <div class="preview-scheme-name">PMEGP Subsidy</div>
+      <div class="preview-meta">Up to ₹50 Lakhs • 35% Subsidy</div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Statistics Grid -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <!-- Stat 1: Saved Schemes -->
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div class="stat-icon-wrapper icon-teal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        </div>
+        <span class="stat-pill-badge badge-teal">Saved</span>
+      </div>
+      <div class="stat-main">
+        <div class="stat-number">{{ saved_count }}</div>
+        <div class="stat-title">Saved Schemes</div>
+        <p class="stat-desc">Schemes bookmarked for your business evaluation</p>
+      </div>
+      <div class="stat-footer">
+        <a href="{{ url_for('saved_schemes') }}" class="stat-link">
+          <span>View saved</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Stat 2: Past Searches -->
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div class="stat-icon-wrapper icon-indigo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+        <span class="stat-pill-badge badge-indigo">History</span>
+      </div>
+      <div class="stat-main">
+        <div class="stat-number">{{ history_count }}</div>
+        <div class="stat-title">Past Searches</div>
+        <p class="stat-desc">Search runs with stored business requirements</p>
+      </div>
+      <div class="stat-footer">
+        <a href="{{ url_for('history') }}" class="stat-link">
+          <span>View history</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Stat 3: Profile Completion -->
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div class="stat-icon-wrapper icon-emerald">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <span class="stat-pill-badge badge-emerald">{{ profile_completion }}%</span>
+      </div>
+      <div class="stat-main">
+        <div class="stat-number">{{ profile_completion }}%</div>
+        <div class="stat-title">Profile Progress</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width: {{ profile_completion }}%;"></div>
+        </div>
+        <p class="stat-desc">{{ 'Profile fully setup' if profile_completion == 100 else 'Add mobile or run search to reach 100%' }}</p>
+      </div>
+      <div class="stat-footer">
+        <a href="{{ url_for('profile') }}" class="stat-link">
+          <span>{{ 'Manage profile' if profile_completion == 100 else 'Complete profile' }}</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Stat 4: Available Schemes -->
+    <div class="stat-card">
+      <div class="stat-card-header">
+        <div class="stat-icon-wrapper icon-amber">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M3 7v14"></path><path d="M21 7v14"></path><path d="M6 7V3h12v4"></path><path d="M9 11h2"></path><path d="M9 15h2"></path><path d="M13 11h2"></path><path d="M13 15h2"></path></svg>
+        </div>
+        <span class="stat-pill-badge badge-amber">Active</span>
+      </div>
+      <div class="stat-main">
+        <div class="stat-number">{{ total_schemes_count }}</div>
+        <div class="stat-title">Government Schemes</div>
+        <p class="stat-desc">Central & state financial support programs available</p>
+      </div>
+      <div class="stat-footer">
+        <a href="{{ url_for('find_schemes') }}" class="stat-link">
+          <span>Explore schemes</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dashboard Main Grid: Left Main / Right Sidebar -->
+<div class="dash-main-layout">
+  <!-- Left Primary Column -->
+  <div class="dash-col-primary">
+
+    <!-- Action Banner: Find Schemes -->
+    <div class="action-banner-card">
+      <div class="action-banner-body">
+        <div class="action-banner-tag">SCHEME DISCOVERY</div>
+        <h2 class="action-banner-title">Find the Right Government Scheme</h2>
+        <p class="action-banner-desc">Tell us a little about your business—turnover, loan requirement, and industry—and our rule-based AI engine will calculate match scores and eligibility instantly.</p>
+        <ul class="action-bullet-list">
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Instant fit scoring (0–100%) with rule explanations</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Compare up to 3 schemes side-by-side</span>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Direct access to official application links & document checklists</span>
+          </li>
+        </ul>
+        <a href="{{ url_for('find_schemes') }}" class="btn btn-primary btn-action-lg">
+          <span>Find Suitable Schemes Now</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Recommended / Featured Schemes Section -->
+    <div class="section-card">
+      <div class="section-card-header">
+        <div>
+          <div class="section-eyebrow">POPULAR PROGRAMS</div>
+          <h3 class="section-title">Recommended for You</h3>
+          <p class="section-subtitle">Verified government funding schemes commonly utilized by Indian small businesses</p>
+        </div>
+        <a href="{{ url_for('find_schemes') }}" class="btn-text-action">
+          <span>Search with your criteria</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+
+      <div class="featured-schemes-list">
+        {% for scheme in featured_schemes %}
+        <div class="featured-scheme-card">
+          <div class="featured-scheme-top">
+            <div class="scheme-title-wrap">
+              <span class="scheme-type-pill">Central / State Scheme</span>
+              <h4 class="scheme-card-name">{{ scheme.scheme_name }}</h4>
+            </div>
+            <button type="button" class="btn-save-toggle {{ 'is-saved' if scheme.scheme_id in saved_ids else '' }}" data-scheme-id="{{ scheme.scheme_id }}" aria-label="{{ 'Remove from saved' if scheme.scheme_id in saved_ids else 'Save scheme' }}">
+              {% if scheme.scheme_id in saved_ids %}
+              <svg class="save-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+              <span class="save-btn-text">Saved</span>
+              {% else %}
+              <svg class="save-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+              <span class="save-btn-text">Save</span>
+              {% endif %}
+            </button>
+          </div>
+
+          <p class="featured-scheme-desc">{{ scheme.description }}</p>
+
+          <div class="featured-scheme-meta">
+            <div class="meta-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <span><strong>Funding:</strong> {{ scheme.loan_details }}</span>
+            </div>
+          </div>
+
+          <div class="featured-scheme-actions">
+            <a href="{{ url_for('scheme_details', scheme_id=scheme.scheme_id) }}" class="btn btn-outline btn-sm">
+              <span>View Scheme Details</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Right Secondary Column (Sidebar) -->
+  <div class="dash-col-secondary">
+
+    <!-- Profile Progress Card -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">
+        <div class="sidebar-icon-wrap icon-emerald">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        </div>
+        <h4 class="sidebar-card-title">Business Profile</h4>
+      </div>
+      <div class="profile-progress-body">
+        <div class="progress-status-row">
+          <span class="progress-lbl">Setup Progress</span>
+          <span class="progress-val">{{ profile_completion }}%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width: {{ profile_completion }}%;"></div>
+        </div>
+        {% if profile_completion < 100 %}
+        <p class="sidebar-card-desc">Complete your login details to unlock personalized scheme recommendations and easy retrieval.</p>
+        <a href="{{ url_for('profile') }}" class="btn btn-outline btn-block btn-sm">
+          <span>Complete Profile →</span>
+        </a>
+        {% else %}
+        <p class="sidebar-card-desc">Your profile is fully up to date. You are ready to search, compare, and save schemes.</p>
+        <a href="{{ url_for('profile') }}" class="btn btn-outline btn-block btn-sm">
+          <span>Manage Profile →</span>
+        </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Recent Activity Card -->
+    <div class="sidebar-card">
+      <div class="sidebar-card-header">
+        <div class="sidebar-icon-wrap icon-indigo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <h4 class="sidebar-card-title">Recent Activity</h4>
+      </div>
+
+      {% if recent_searches|length > 0 or recent_saved|length > 0 %}
+      <div class="activity-timeline">
+        {% for s in recent_searches %}
+        <div class="activity-item">
+          <div class="activity-bullet bullet-search">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
+          <div class="activity-details">
+            <div class="activity-text">
+              <strong>Searched:</strong> {{ s.business_type|title }} in {{ s.location }}
+            </div>
+            <div class="activity-meta">₹{{ "{:,}".format(s.loan_amount) }} · {{ s.search_date }}</div>
+            <a href="{{ url_for('history_view', history_id=s.history_id) }}" class="activity-link">View results →</a>
+          </div>
+        </div>
+        {% endfor %}
+
+        {% for sv in recent_saved %}
+        <div class="activity-item">
+          <div class="activity-bullet bullet-saved">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <div class="activity-details">
+            <div class="activity-text">
+              <strong>Saved:</strong> {{ sv.scheme_name }}
+            </div>
+            <div class="activity-meta">{{ sv.saved_date }}</div>
+            <a href="{{ url_for('scheme_details', scheme_id=sv.scheme_id) }}" class="activity-link">Open scheme →</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="sidebar-empty-state">
+        <div class="empty-icon-bubble">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        </div>
+        <p class="empty-title">No searches yet</p>
+        <p class="empty-desc">Your recent searches and saved schemes will appear here once you begin exploring.</p>
+        <a href="{{ url_for('find_schemes') }}" class="btn btn-primary btn-sm btn-block">Start First Search →</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Official Portals Quick Links -->
+    <div class="sidebar-card portals-card">
+      <div class="sidebar-card-header">
+        <div class="sidebar-icon-wrap icon-teal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+        </div>
+        <h4 class="sidebar-card-title">Govt Official Portals</h4>
+      </div>
+      <div class="portal-links-list">
+        <a href="https://udyamregistration.gov.in" target="_blank" rel="noopener" class="portal-link-item">
+          <span>Udyam MSME Registration</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </a>
+        <a href="https://www.jansamarth.in" target="_blank" rel="noopener" class="portal-link-item">
+          <span>National JanSamarth Portal</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </a>
+        <a href="https://www.sidbi.in" target="_blank" rel="noopener" class="portal-link-item">
+          <span>SIDBI Small Business Loans</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- "How SmartBiz Helps You" (3-Step Guide) -->
+<section class="how-it-works-section">
+  <div class="how-header">
+    <div class="section-eyebrow">TRANSPARENT PROCESS</div>
+    <h3 class="section-title">How SmartBiz Helps You</h3>
+    <p class="section-subtitle">Three simple steps to find, evaluate, and compare government loan support</p>
+  </div>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number-pill">01</div>
+      <div class="step-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      </div>
+      <h4 class="step-title">Tell Us About Your Business</h4>
+      <p class="step-desc">Enter your industry sector, state location, annual turnover, and needed loan amount. Data is never stored on your profile.</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number-pill">02</div>
+      <div class="step-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      </div>
+      <h4 class="step-title">Explore Suitable Schemes</h4>
+      <p class="step-desc">Our rule-based AI engine calculates clear match scores (0–100%) and explains exactly why each scheme matches your criteria.</p>
+    </div>
+
+    <div class="step-card">
+      <div class="step-number-pill">03</div>
+      <div class="step-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      </div>
+      <h4 class="step-title">Save & Compare Options</h4>
+      <p class="step-desc">Bookmark top options for later or compare up to 3 schemes side by side on subsidy rates, interest, and required documents.</p>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
