@@ -1537,8 +1537,17 @@ table.compare-table td:first-child {
 .history-date { font-size: 0.78rem; color: var(--text-subtle); margin-bottom: 4px; }
 
 /* Profile Grid */
+/* Profile Grid & Eyebrow */
 .welcome-block { margin-bottom: 24px; }
-.welcome-block .eyebrow { color: var(--indigo-600); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.eyebrow, .welcome-block .eyebrow {
+  color: var(--indigo-600);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  display: inline-block;
+}
 .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .profile-card {
   background: var(--bg-card);
@@ -1546,6 +1555,63 @@ table.compare-table td:first-child {
   border-radius: var(--radius-lg);
   padding: 28px;
   box-shadow: var(--shadow-card);
+}
+
+/* Scheme Details & AI Explain */
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.ai-explain {
+  background: linear-gradient(135deg, var(--indigo-50) 0%, var(--teal-50) 100%);
+  border: 1px solid #C7D2FE;
+  border-left: 4px solid var(--indigo-600);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.ai-explain h4 {
+  color: var(--indigo-900);
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.ai-explain p {
+  color: var(--text-main);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.detail-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-card);
+}
+.detail-block h4 {
+  font-size: 0.98rem;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.detail-block p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* Saved Schemes Grid */
+.saved-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* Empty State */
@@ -1674,6 +1740,50 @@ table.compare-table td:first-child {
   .footer-inner { grid-template-columns: 1fr; }
   .dash-hero-title { font-size: 1.7rem; }
   .page { padding: 20px 16px 56px; }
+  .scheme-card {
+    grid-template-columns: 60px 1fr;
+    gap: 16px;
+    padding: 18px 16px;
+  }
+  .match-badge {
+    width: 56px;
+    height: 56px;
+  }
+  .match-badge .num {
+    font-size: 1rem;
+  }
+  .compare-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 580px) {
+  .scheme-card {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .card-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .card-actions .btn, .card-actions .btn-save-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+  .compare-check {
+    margin-left: 0;
+    justify-content: flex-start;
+    padding: 4px 0;
+  }
+  .history-entry {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .history-index {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1686,4 +1796,6 @@ table.compare-table td:first-child {
   .btn-hero-primary, .btn-hero-secondary { width: 100%; justify-content: center; }
   .stats-grid { grid-template-columns: 1fr; }
   .action-banner-card { padding: 22px 18px; }
+  .detail-header { flex-direction: column; align-items: stretch; }
+  .detail-header .btn-save-toggle { width: 100%; justify-content: center; }
 }

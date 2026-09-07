@@ -427,16 +427,25 @@ def find_schemes():
     return render_template("find-schemes.html")
 
 
+def _clean_int(val, default=0):
+    if val is None:
+        return default
+    if isinstance(val, (int, float)):
+        return int(val)
+    cleaned = re.sub(r"[^\d]", "", str(val).strip())
+    return int(cleaned) if cleaned else default
+
+
 def _run_match(form):
     user_input = {
-        "business_type": form.get("business_type", ""),
-        "location": form.get("location", ""),
-        "annual_turnover": int(form.get("annual_turnover") or 0),
-        "loan_amount": int(form.get("loan_amount") or 0),
-        "loan_purpose": form.get("loan_purpose", ""),
-        "business_age": int(form.get("business_age") or 0),
-        "registration_status": form.get("registration_status", ""),
-        "previous_loan": form.get("previous_loan", ""),
+        "business_type": str(form.get("business_type") or "").strip(),
+        "location": str(form.get("location") or "").strip(),
+        "annual_turnover": _clean_int(form.get("annual_turnover")),
+        "loan_amount": _clean_int(form.get("loan_amount")),
+        "loan_purpose": str(form.get("loan_purpose") or "").strip(),
+        "business_age": _clean_int(form.get("business_age")),
+        "registration_status": str(form.get("registration_status") or "").strip(),
+        "previous_loan": str(form.get("previous_loan") or "").strip(),
     }
     all_schemes = [dict(row_to_scheme(r)) for r in get_db().execute("SELECT * FROM schemes")]
     ranked = match_schemes(all_schemes, user_input)

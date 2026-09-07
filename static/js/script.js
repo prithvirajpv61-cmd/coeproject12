@@ -232,5 +232,51 @@ document.addEventListener("click", function (e) {
   });
 });
 
+// Client-side Form Validation
+document.addEventListener("DOMContentLoaded", function () {
+  // 1. Password confirmation validation for Register form
+  var registerForm = document.querySelector('form[action*="register"]');
+  if (registerForm) {
+    registerForm.addEventListener("submit", function (e) {
+      var pass = registerForm.querySelector('input[name="password"]');
+      var confirm = registerForm.querySelector('input[name="confirm_password"]');
+      if (pass && confirm && pass.value !== confirm.value) {
+        e.preventDefault();
+        showToast("Passwords do not match. Please verify.", "error");
+        confirm.focus();
+      }
+    });
+  }
 
+  // 2. Password confirmation validation for Reset Password form
+  var resetForm = document.querySelector('form[action*="reset-password"]');
+  if (resetForm) {
+    resetForm.addEventListener("submit", function (e) {
+      var pass = resetForm.querySelector('input[name="new_password"]');
+      var confirm = resetForm.querySelector('input[name="confirm_password"]');
+      if (pass && confirm && pass.value !== confirm.value) {
+        e.preventDefault();
+        showToast("Passwords do not match. Please verify.", "error");
+        confirm.focus();
+      }
+    });
+  }
 
+  // 3. Find schemes form numeric validation
+  var findForm = document.querySelector('form[action*="results"]');
+  if (findForm) {
+    findForm.addEventListener("submit", function (e) {
+      var loan = findForm.querySelector('input[name="loan_amount"]');
+      var turnover = findForm.querySelector('input[name="annual_turnover"]');
+      if (loan && parseFloat(loan.value) <= 0) {
+        e.preventDefault();
+        showToast("Please enter a valid positive loan amount.", "warning");
+        loan.focus();
+      } else if (turnover && parseFloat(turnover.value) < 0) {
+        e.preventDefault();
+        showToast("Turnover cannot be negative.", "warning");
+        turnover.focus();
+      }
+    });
+  }
+});

@@ -31,10 +31,9 @@ touching the rest of the app.
 ## Setup
 
 ```bash
-cd SmartBiz
 python3 -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
-pip install flask werkzeug
+pip install flask werkzeug itsdangerous
 python3 app.py
 ```
 
@@ -44,16 +43,31 @@ Then open **http://localhost:5000** in your browser. The SQLite database
 ## Project structure
 
 ```
-SmartBiz/
+project/
 ├── app.py                 # Flask routes, auth, DB access
-├── database.db             # created automatically on first run
+├── database.db             # SQLite database (auto-seeded)
+├── README.md              # Project documentation
+├── .gitignore             # Git ignore configuration
 ├── ai/
-│   ├── schemes_data.py     # seed data for 8 schemes
-│   └── scheme_matcher.py   # matching / scoring logic
-├── templates/               # Jinja2 HTML templates
+│   ├── schemes_data.py     # Seed data for government schemes
+│   └── scheme_matcher.py   # AI scoring & matching engine
+├── templates/              # Jinja2 HTML templates
+│   ├── base.html
+│   ├── compare.html
+│   ├── dashboard.html
+│   ├── find-schemes.html
+│   ├── forgot-password.html
+│   ├── history.html
+│   ├── login.html
+│   ├── profile.html
+│   ├── register.html
+│   ├── reset-password.html
+│   ├── results.html
+│   ├── saved-schemes.html
+│   └── scheme-details.html
 └── static/
-    ├── css/style.css
-    └── js/script.js
+    ├── css/style.css       # Unified design system & responsive styling
+    └── js/script.js        # Universal save/unsave, compare, & client validation
 ```
 
 ## Notes for your project report
