@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Matched schemes{% endblock %}
+{% block title %}Matched Schemes{% endblock %}
 {% block content %}
 <div class="results-header">
   <div class="eyebrow">{{ 'Past search results' if from_history else 'Your requirements' }}</div>
@@ -32,20 +32,68 @@
       <span class="num">{{ scheme.match_score }}%</span>
       <span class="pct">match</span>
     </div>
-    <div>
-      <h3>{{ scheme.scheme_name }}</h3>
-      <p class="desc">{{ scheme.description }}</p>
-      <div class="scheme-meta">
-        <span><b>Loan support:</b> {{ scheme.loan_details }}</span>
+    <div class="scheme-card-body">
+      <div class="scheme-title-header">
+        <h3>{{ scheme.scheme_name }}</h3>
+        <span class="score-pill-tag {{ 'pill-high' if scheme.match_score >= 80 else 'pill-mid' }}">
+          Match Score: {{ scheme.match_score }}%
+        </span>
       </div>
-      {% if scheme.match_reasons %}
-      <ul class="match-reasons">
-        {% for reason in scheme.match_reasons[:3] %}
-        <li>{{ reason }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-      <div class="card-actions">
+      <p class="desc">{{ scheme.description }}</p>
+      
+      <div class="scheme-meta">
+        <span><b>Funding support:</b> {{ scheme.loan_details }}</span>
+      </div>
+
+      <!-- Transparent Factor Breakdown -->
+      <div class="match-breakdown-card">
+        <div class="breakdown-header">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <strong>Why this scheme matches:</strong>
+        </div>
+        <ul class="breakdown-factors-list">
+          {% if scheme.match_factors %}
+            {% if scheme.match_factors.business_category %}
+            <li>
+              <span class="factor-name">Business category:</span>
+              <span class="factor-val-status {{ 'status-pos' if scheme.match_factors.business_category.is_positive else 'status-neutral' }}">{{ scheme.match_factors.business_category.status }}</span>
+              <span class="factor-val-desc">— {{ scheme.match_factors.business_category.detail }}</span>
+            </li>
+            {% endif %}
+            {% if scheme.match_factors.location %}
+            <li>
+              <span class="factor-name">Location:</span>
+              <span class="factor-val-status {{ 'status-pos' if scheme.match_factors.location.is_positive else 'status-warn' }}">{{ scheme.match_factors.location.status }}</span>
+              <span class="factor-val-desc">— {{ scheme.match_factors.location.detail }}</span>
+            </li>
+            {% endif %}
+            {% if scheme.match_factors.loan_amount %}
+            <li>
+              <span class="factor-name">Loan requirement:</span>
+              <span class="factor-val-status {{ 'status-pos' if scheme.match_factors.loan_amount.is_positive else 'status-neutral' }}">{{ scheme.match_factors.loan_amount.status }}</span>
+              <span class="factor-val-desc">— {{ scheme.match_factors.loan_amount.detail }}</span>
+            </li>
+            {% endif %}
+            {% if scheme.match_factors.business_age %}
+            <li>
+              <span class="factor-name">Business age:</span>
+              <span class="factor-val-status {{ 'status-pos' if scheme.match_factors.business_age.is_positive else 'status-warn' }}">{{ scheme.match_factors.business_age.status }}</span>
+              <span class="factor-val-desc">— {{ scheme.match_factors.business_age.detail }}</span>
+            </li>
+            {% endif %}
+          {% elif scheme.match_reasons %}
+            {% for reason in scheme.match_reasons[:4] %}
+            <li><span class="factor-bullet">•</span> <span class="factor-val-desc">{{ reason }}</span></li>
+            {% endfor %}
+          {% endif %}
+        </ul>
+        <div class="card-disclaimer-text">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span>Match score is an informational recommendation and does not guarantee eligibility. Please verify eligibility on the official scheme website.</span>
+        </div>
+      </div>
+
+      <div class="card-actions" style="margin-top: 14px;">
         <a href="{{ url_for('scheme_details', scheme_id=scheme.scheme_id) }}" class="btn btn-outline btn-sm">View details</a>
         <button type="button" class="btn-save-toggle {{ 'is-saved' if scheme.scheme_id in saved_ids else '' }}" data-scheme-id="{{ scheme.scheme_id }}" aria-label="{{ 'Remove from saved' if scheme.scheme_id in saved_ids else 'Save scheme' }}">
           {% if scheme.scheme_id in saved_ids %}
@@ -66,6 +114,8 @@
   {% endfor %}
 </div>
 
-<div class="notice-box" style="margin-top:20px;">Match score is only an informational recommendation. Final eligibility should always be verified from the official scheme authority.</div>
+<div class="notice-box" style="margin-top:24px;">
+  <strong>Official Scheme Notice:</strong> Match scores are calculated using transparent algorithmic fitting against official scheme parameters. Official approval requires documentation verification by participating banks and district industries centres.
+</div>
 {% endif %}
 {% endblock %}

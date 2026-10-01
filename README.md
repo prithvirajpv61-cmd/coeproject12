@@ -1,84 +1,146 @@
-# SmartBiz
+# SmartBiz — Government Loan Schemes Discovery Platform
 
-A discovery, comparison and information platform that helps small business
-owners identify potentially relevant government financial schemes — it does
-not provide loans itself.
+A lightweight, transparent web application that helps small business owners and entrepreneurs discover, evaluate, and compare Indian government loan schemes, subsidies, and credit guarantee programs.
 
-## What's built (Phases 1–9 from the plan)
+---
 
-- Login / Register (Phase 1)
-- Dashboard (Phase 2)
-- Find Schemes form (Phase 3)
-- Scheme database, seeded with 8 real-world Indian schemes: PMEGP, MUDRA,
-  Stand-Up India, CGTMSE, TN-NEEDS, TAHDCO, PM SVANidhi, SIDBI SMILE (Phase 4)
-- Results page with AI match scoring (Phase 5, Phase 9)
-- Scheme details page with a plain-language explanation (Phase 6)
-- Save + Search History (Phase 7)
-- Compare up to 3 schemes side by side (Phase 8)
+## Overview
 
-Phase 10 (testing with a real user) is up to you — the app is ready to try.
+Navigating government schemes can be overwhelming for small business owners. **SmartBiz** simplifies this process with an explainable, rule-based matching engine. Users enter key business details (such as industry sector, location, turnover, loan requirement, and business age) to receive prioritized scheme recommendations with compatibility scores (0–100%) and clear eligibility explanations.
 
-## How the "AI" matching works
+> **Disclaimer:** SmartBiz is an informational discovery and comparison platform, not a direct lender or financial institution. Scheme details should always be verified with official government portals before applying.
 
-`ai/scheme_matcher.py` is a transparent, rule-based scoring engine (not a
-black-box model): it scores each scheme 0–100 against your business type,
-location, loan amount, turnover, purpose, and business age, and explains
-*why* each score was given. This is deliberately explainable — good for a
-student project, and honest with the user about how the "match" was decided.
-Swap in a real ML/LLM model later by replacing `match_schemes()` without
-touching the rest of the app.
+---
 
-## Setup
+## Main Features
+
+- **User Authentication & Profiles**: Secure user registration and login with password hashing (`Werkzeug`), session management, and self-service password reset.
+- **Interactive Dashboard**: Overview of key statistics, profile completion progress, recent search history, bookmarked schemes, and quick links to official portals.
+- **Smart Scheme Finder**: Dynamic search form collecting essential business criteria without storing sensitive business financials on the user's permanent profile.
+- **Transparent AI Matching Engine**: Multi-factor rule-based algorithm that calculates 0–100% fit scores and provides plain-language explanations for each recommendation.
+- **Scheme Details & Official Links**: Comprehensive breakdown of eligibility criteria, loan amounts, subsidy rates, required documents, and direct links to official portals.
+- **Side-by-Side Comparison**: Compare up to 3 selected schemes simultaneously across eligibility, loan amounts, subsidies, and document requirements.
+- **Bookmark & Search History**: Save preferred schemes across sessions and review past search parameters and results at any time.
+- **Clean Responsive UI**: Modern design system built with semantic HTML, custom CSS, and vanilla JavaScript (no bulky third-party frontend frameworks required).
+
+---
+
+## Technologies Used
+
+- **Backend**: Python 3, Flask
+- **Security & Cryptography**: Werkzeug (`generate_password_hash`, `check_password_hash`), itsdangerous (`URLSafeTimedSerializer`)
+- **Database**: SQLite3 (automatically initialized and seeded)
+- **Frontend / Templating**: Jinja2 HTML Templates, Vanilla CSS, Vanilla JavaScript
+
+---
+
+## Project Structure
+
+```text
+project/
+│
+├── static/
+│   ├── script.js               # Interactive UI logic, AJAX save/unsave, compare bar
+│   └── style.css               # Design system, variables, and responsive layout
+│
+├── templates/
+│   ├── base.html               # Base layout, navigation header, and footer
+│   ├── compare.html            # Side-by-side scheme comparison table
+│   ├── dashboard.html          # Main user dashboard with stats & quick actions
+│   ├── find-schemes.html       # Business requirements input form
+│   ├── forgot-password.html    # Password reset request page
+│   ├── history.html            # Past search history log
+│   ├── login.html              # User login page
+│   ├── profile.html            # User account settings & password management
+│   ├── register.html           # Account creation page
+│   ├── reset-password.html     # Password update page
+│   ├── results.html            # Ranked scheme results with match scores
+│   ├── saved-schemes.html      # User's bookmarked schemes
+│   └── scheme-details.html     # Detailed scheme view with plain explanation
+│
+├── .gitignore                  # Git ignore rules for Python, SQLite, & cache
+├── app.py                      # Core Flask application, routes, and DB setup
+├── README.md                   # Project documentation
+├── requirements.txt            # Python package dependencies
+├── scheme_matcher.py           # Rule-based scheme matching & scoring engine
+└── schemes_data.py             # Seed dataset of government schemes
+```
+
+---
+
+## Installation & Setup
+
+### Prerequisites
+
+- Python 3.8 or higher installed on your system.
+
+### 1. Clone the Repository
 
 ```bash
+git clone <your-repository-url>
+cd project
+```
+
+### 2. Create and Activate a Virtual Environment
+
+**On Windows (PowerShell):**
+```powershell
+python -m venv venv
+venv\Scripts\Activate.ps1
+```
+
+**On Windows (Command Prompt):**
+```cmd
+python -m venv venv
+venv\Scripts\activate.bat
+```
+
+**On Linux / macOS:**
+```bash
 python3 -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-pip install flask werkzeug itsdangerous
-python3 app.py
+source venv/bin/activate
 ```
 
-Then open **http://localhost:5000** in your browser. The SQLite database
-(`database.db`) is created and seeded with schemes automatically on first run.
+### 3. Install Dependencies
 
-## Project structure
-
-```
-project/
-├── app.py                 # Flask routes, auth, DB access
-├── database.db             # SQLite database (auto-seeded)
-├── README.md              # Project documentation
-├── .gitignore             # Git ignore configuration
-├── ai/
-│   ├── schemes_data.py     # Seed data for government schemes
-│   └── scheme_matcher.py   # AI scoring & matching engine
-├── templates/              # Jinja2 HTML templates
-│   ├── base.html
-│   ├── compare.html
-│   ├── dashboard.html
-│   ├── find-schemes.html
-│   ├── forgot-password.html
-│   ├── history.html
-│   ├── login.html
-│   ├── profile.html
-│   ├── register.html
-│   ├── reset-password.html
-│   ├── results.html
-│   ├── saved-schemes.html
-│   └── scheme-details.html
-└── static/
-    ├── css/style.css       # Unified design system & responsive styling
-    └── js/script.js        # Universal save/unsave, compare, & client validation
+```bash
+pip install -r requirements.txt
 ```
 
-## Notes for your project report
+### 4. Run the Application
 
-- Business details are **never** saved to the user's profile — only login
-  info (name, email, mobile, password hash) is stored in `users`.
-  Each search is logged in `search_history` instead.
-- Every scheme page and the footer reminds the user to verify details
-  against the official government link before applying — the match score
-  is explicitly labelled as informational only.
-- Passwords are hashed with Werkzeug's `generate_password_hash` /
-  `check_password_hash` — never stored in plain text.
-- To add more schemes, add entries to `ai/schemes_data.py` and delete
-  `database.db` so it reseeds (or insert directly into the `schemes` table).
+```bash
+python app.py
+```
+
+Open your web browser and navigate to:
+```
+http://127.0.0.1:5000
+```
+
+---
+
+## Database Configuration
+
+- The application uses a local **SQLite** database (`database.db`).
+- **Auto-Initialization**: You do not need to manually create or seed the database. When the application starts, it automatically creates the required tables (`users`, `schemes`, `saved_schemes`, `search_history`) and seeds the database with verified government schemes (PMEGP, MUDRA, Stand-Up India, CGTMSE, TN NEEDS, TAHDCO, PM SVANidhi, SIDBI SMILE).
+- `database.db` is ignored by `.gitignore` so local user accounts and runtime test data are not committed to GitHub.
+
+---
+
+## Government Schemes Included
+
+1. **PMEGP** (Prime Minister's Employment Generation Programme) — Credit-linked subsidy for new micro-enterprises.
+2. **PMMY / MUDRA** (Pradhan Mantri MUDRA Yojana) — Collateral-free loans up to ₹10 Lakhs (Shishu, Kishor, Tarun).
+3. **Stand-Up India Scheme** — Greenfield enterprise loans (₹10 Lakhs to ₹1 Crore) for SC/ST and Women entrepreneurs.
+4. **CGTMSE** (Credit Guarantee Fund Trust for Micro and Small Enterprises) — Collateral-free credit facility up to ₹2 Crores.
+5. **TN NEEDS** — Subsidized loans for educated youth in Tamil Nadu.
+6. **TAHDCO Scheme** — Economic development subsidies for SC/ST entrepreneurs in Tamil Nadu.
+7. **PM SVANidhi** — Micro-credit working capital loans for urban street vendors.
+8. **SIDBI SMILE** — Soft loans and term loans for MSMEs to meet required debt-equity ratios.
+
+---
+
+## License & Academic Note
+
+Developed as an academic demonstration project for small business government scheme discovery and assistance.

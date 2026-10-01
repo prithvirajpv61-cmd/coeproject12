@@ -1,16 +1,30 @@
-# Byte-compiled / optimized / DLL files
+# Python Byte-compiled / cache files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
 
+# Environments & Virtual Envs
+.env
+.env.*
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# SQLite runtime database & locks
+database.db
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
 # Distribution / packaging
-.Python
 build/
-develop-eggs/
 dist/
+develop-eggs/
 downloads/
 eggs/
 .eggs/
@@ -24,14 +38,6 @@ wheels/
 .installed.cfg
 *.egg
 
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -44,25 +50,15 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# SQLite databases (optional, depending on preference)
-# database.db
-
-# IDEs
+# IDE & Editor files
 .vscode/
 .idea/
 *.swp
 *.swo
+*.sublime-project
+*.sublime-workspace
 
-# Operating System
+# Operating System files
 Thumbs.db
 ehthumbs.db
 Desktop.ini

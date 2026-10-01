@@ -13,19 +13,22 @@
     <div class="form-section-title">Business basics</div>
     <div class="field-row">
       <div class="field">
-        <label for="business_type">Business type</label>
-        <select id="business_type" name="business_type" required>
-          <option value="">Select type</option>
-          <option value="retail">Retail / shop</option>
-          <option value="manufacturing">Manufacturing</option>
-          <option value="service">Service</option>
-          <option value="printing">Printing / Xerox</option>
-          <option value="food">Food / catering</option>
-          <option value="bakery">Bakery</option>
-          <option value="workshop">Workshop / repair</option>
-          <option value="tailoring">Tailoring</option>
-          <option value="trading">Trading</option>
-        </select>
+        <label for="business_type">Business type / category</label>
+        <input type="text" id="business_type" name="business_type" list="business_type_list" placeholder="e.g. Xerox Shop, Bakery, Grocery, Mobile Repair, Salon..." required autocomplete="off">
+        <datalist id="business_type_list">
+          <option value="Retail / General Store">
+          <option value="Xerox Shop / Photocopy">
+          <option value="Bakery / Food Processing">
+          <option value="Grocery Shop / Kirana">
+          <option value="Tailoring / Garments">
+          <option value="Mobile Shop & Service">
+          <option value="Salon / Personal Care">
+          <option value="Auto Repair / Workshop">
+          <option value="Manufacturing">
+          <option value="Service Enterprise">
+          <option value="Trading / Wholesale">
+        </datalist>
+        <p class="hint">Type your specific business (e.g. Xerox shop, Bakery, Auto repair) or pick from suggestions.</p>
       </div>
       <div class="field">
         <label for="location">Business location / state</label>

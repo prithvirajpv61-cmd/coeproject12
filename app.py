@@ -11,8 +11,8 @@ from flask import (
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer
 
-from ai.schemes_data import SCHEMES
-from ai.scheme_matcher import match_schemes, explain_simple
+from schemes_data import SCHEMES
+from scheme_matcher import match_schemes, explain_simple
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "database.db")
@@ -148,6 +148,11 @@ def init_db():
         db.commit()
     db.close()
     return fresh
+
+
+# Auto-initialize database schema and seed data on app startup
+with app.app_context():
+    init_db()
 
 
 # ---------------------------------------------------------------------------
